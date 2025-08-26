@@ -248,7 +248,7 @@ export class MapBoxMapEngine implements MapEngine<Map> {
 
     }
 
-    AppPolylines(mapData: Array<[number, number] | null>, colors: string[], currentIcon: string | null, startIcon: string | null, endIcon: string | null): void {
+    AppPolylines(mapData: Array<[number, number] | null>, colors: string[], currentIcon: string | null, startIcon: string | null, endIcon: string | null, zoomLevel: number, rotationDegree: number): void {
 
         this.Bounds = mapData.filter(o => o != null);
 
@@ -326,6 +326,17 @@ export class MapBoxMapEngine implements MapEngine<Map> {
             }
 
             this.CenterMap();
+            if(zoomLevel != -1){
+                this.map?.setZoom(zoomLevel);
+            }
+            this.map?.rotateTo(rotationDegree);
+
+
+            if (this.otherParams.MapBoxAnimateOnLoading == '1') {
+
+                this.animateLineOptions.StartTime = performance.now();
+                this.animateLine();
+            }
 
 
             if (this.otherParams.MapBoxAnimateOnLoading == '1') {

@@ -333,6 +333,12 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 	$pointsoffset   	= wpgpxmaps_findValue( $attr, 'pointsoffset', 'wpgpxmaps_pointsoffset', 10 );
 	$donotreducegpx 	= wpgpxmaps_findValue( $attr, 'donotreducegpx', 'wpgpxmaps_donotreducegpx', false );
 
+
+	/*Rotation and zoom */
+
+	$zoom = wpgpxmaps_findValue( $attr, 'zoom', 'wpgpxmaps_zoom', -1 );
+	$rotation = wpgpxmaps_findValue( $attr, 'rotation', 'wpgpxmaps_zoom', 0 );
+
 	$colors_map = explode( ' ', $color_map );
 
 	$gpxurl = esc_url( $gpx );
@@ -747,6 +753,8 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 					currentpositioncon : "' . esc_js( $currentpositioncon ) . '",
 					usegpsposition     : "' . esc_js( $usegpsposition ) . '",
 					zoomOnScrollWheel  : "' . esc_js( $zoomOnScrollWheel ) . '",
+					zoomLevel  		   : "' . esc_js( $zoom ) . '",
+					rotationDegree	   : "' . esc_js( $rotation ) . '",
 					ngGalleries        : [' . esc_js( $ngGalleries ) . '],
 					ngImages           : [' . esc_js( $ngImages ) . '],
 					pluginUrl          : "' . esc_url( plugins_url() ) . '",
