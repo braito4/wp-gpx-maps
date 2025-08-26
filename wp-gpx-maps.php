@@ -3,7 +3,7 @@
  * Plugin Name: WP-GPX-Maps
  * Plugin URI: http://www.devfarm.it/
  * Description: Draws a GPX track with altitude chart
- * Version: 1.7.11
+ * Version: 1.8.00
  * Author: Bastianon Massimo
  * Author URI: http://www.devfarm.it/
  * Text Domain: wp-gpx-maps
@@ -18,7 +18,7 @@
 /**
  * Version of the plugin
  */
-define( 'WPGPXMAPS_CURRENT_VERSION', '1.7.10' );
+define( 'WPGPXMAPS_CURRENT_VERSION', '1.8.00' );
 
 require 'wp-gpx-maps-utils.php';
 require 'wp-gpx-maps-admin.php';
@@ -333,6 +333,12 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 	$pointsoffset   	= wpgpxmaps_findValue( $attr, 'pointsoffset', 'wpgpxmaps_pointsoffset', 10 );
 	$donotreducegpx 	= wpgpxmaps_findValue( $attr, 'donotreducegpx', 'wpgpxmaps_donotreducegpx', false );
 
+
+	/*Rotation and zoom */
+
+	$zoom = wpgpxmaps_findValue( $attr, 'zoom', 'wpgpxmaps_zoom', -1 );
+	$rotation = wpgpxmaps_findValue( $attr, 'rotation', 'wpgpxmaps_zoom', 0 );
+
 	$colors_map = explode( ' ', $color_map );
 
 	$gpxurl = esc_url( $gpx );
@@ -348,20 +354,12 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 
 	$cacheFileName = md5( $cacheFileName );
 
-	global $wp_filesystem;
-	if (empty($wp_filesystem)) {
-		require_once (ABSPATH . '/wp-admin/includes/file.php');
-		WP_Filesystem();
-	}
-
 	$gpxcache = gpxCacheFolderPath();
 
-	if ( ! ( $wp_filesystem->exists( $gpxcache ) && $wp_filesystem->is_dir( $gpxcache ) ) )
+	if ( ! ( file_exists( $gpxcache ) && is_dir( $gpxcache ) ) )
 	{
-		$wp_filesystem->mkdir( $gpxcache, 0755, true );
-		//@mkdir( $gpxcache, 0755, true );	
+		@mkdir( $gpxcache, 0755, true );
 	}
-
 
 	$gpxcache .= DIRECTORY_SEPARATOR . $cacheFileName . '.tmp';
 
@@ -369,7 +367,7 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 	if ( file_exists( $gpxcache ) && ! ( true == $skipcache ) ) {
 
 		try {
-			$cache_str          = $wp_filesystem->get_contents( $gpxcache );
+			$cache_str          = file_get_contents( $gpxcache );
 			$cache_obj          = unserialize( $cache_str );
 			$points_maps        = $cache_obj['points_maps'];
 			$points_x_time      = $cache_obj['points_x_time'];
@@ -672,13 +670,7 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 
 	if ( ! ( true == $skipcache ) ) {
 
-		global $wp_filesystem;
-		if (empty($wp_filesystem)) {
-			require_once (ABSPATH . '/wp-admin/includes/file.php');
-			WP_Filesystem();
-		}
-
-		$wp_filesystem->put_contents( $gpxcache, serialize( array(
+		file_put_contents( $gpxcache, serialize( array(
 			'points_maps'        => $points_maps,
 			'points_x_time'      => $points_x_time,
 			'points_x_lat'       => $points_x_lat,
@@ -725,7 +717,7 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 		</div>
 		' . esc_html( $error ) . '
 		<script type="module">
-		import { WPGPXMaps } from "'. "/wp-content/plugins/wp-gpx-maps/assets/dist/WP-GPX-Maps.es.js" . '";
+		import { WPGPXMaps } from "'. "../wp-content/plugins/wp-gpx-maps/assets/dist/WP-GPX-Maps.es.js" . '";
 
 		window.addEventListener("load", function() {
 
@@ -761,11 +753,20 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 					currentpositioncon : "' . esc_js( $currentpositioncon ) . '",
 					usegpsposition     : "' . esc_js( $usegpsposition ) . '",
 					zoomOnScrollWheel  : "' . esc_js( $zoomOnScrollWheel ) . '",
+					zoomLevel  		   : "' . esc_js( $zoom ) . '",
+					rotationDegree	   : "' . esc_js( $rotation ) . '",
 					ngGalleries        : [' . esc_js( $ngGalleries ) . '],
 					ngImages           : [' . esc_js( $ngImages ) . '],
 					pluginUrl          : "' . esc_url( plugins_url() ) . '",
 					TFApiKey           : "' . esc_js( get_option( 'wpgpxmaps_openstreetmap_apikey' ) ) . '",
 					MapBoxApiKey           : "' . esc_js( get_option( 'wpgpxmaps_mapbox_apikey' ) ) . '",
+
+					MapBoxMapType           : "' . esc_js( get_option( 'wpgpxmaps_mapbox_type' ) ) . '",
+					MapBoxMapCustomType     : "' . esc_js( get_option( 'wpgpxmaps_mapbox_customtype' ) ) . '",
+					MapBox3dTerrain         : "' . esc_js( filter_var(get_option( 'wpgpxmaps_mapbox_3dterrain' ), FILTER_VALIDATE_BOOLEAN) ) . '",
+					MapBoxFog           	: "' . esc_js( filter_var(get_option( 'wpgpxmaps_mapbox_fog' ), FILTER_VALIDATE_BOOLEAN) ) . '",
+					MapBoxAnimateOnLoading 	: "' . esc_js( get_option( 'wpgpxmaps_mapbox_load_animation' ) ) . '",
+
 					langs              : {
 						altitude        : "' . esc_js( __( 'Altitude', 'wp-gpx-maps' ) ) . '",
 						currentPosition : "' . esc_js( __( 'Current position', 'wp-gpx-maps' ) ) . '",

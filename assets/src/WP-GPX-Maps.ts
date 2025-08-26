@@ -73,6 +73,8 @@ export class WPGPXMaps {
 			endIcon,
 			currentIcon,
 			zoomOnScrollWheel,
+			zoomLevel,
+			rotationDegree,
 			langs,
 			pluginUrl,
 			usegpsposition,
@@ -115,7 +117,8 @@ export class WPGPXMaps {
 			el_map,
 			mapType,
 			('true' == zoomOnScrollWheel),
-			TFApiKey
+			TFApiKey,
+			this.params
 		);
 
 		this.map.EventSelectChart = function (LatLon: LatLng) {
@@ -209,7 +212,8 @@ export class WPGPXMaps {
 					'lat': pos[0],
 					'lng': pos[1],
 					'name': ngg_span_a.children[0].getAttribute('alt'),
-					'url': ngg_span_a.children[0].getAttribute('src'),
+					'image_id': ngg_span_a.getAttribute('data-image-id'),
+					'url': ngg_span_a.getAttribute('href'),
 					'thumbnail': ngg_span_a.children[0].getAttribute('src')
 				});
 
@@ -314,13 +318,14 @@ export class WPGPXMaps {
 
 		/* Print Track. */
 		if (mapData) {
-			this.map.AppPolylines(mapData, color1, currentIcon, startIcon, endIcon);
+			this.map.AppPolylines(mapData, color1, currentIcon, startIcon, endIcon, zoomLevel, rotationDegree);
 		}
 
 		/*
 		map.setCenter(bounds.getCenter());
 		map.fitBounds(bounds);
 		*/
+		
 
 		var contextMap = this.map;
 
@@ -578,7 +583,6 @@ export class WPGPXMaps {
 
 			if (graphSpeed && graphSpeed.length > 0) {
 
-
 				if (wpgpxmaps_MINUTES_PER_100METERS == unitspeed) {
 
 					/* min/100 meters */
@@ -719,6 +723,11 @@ export class WPGPXMaps {
 								hoptions.data.datasets.push(this.wpgpxmapsGetDataset(langs.cadence, myData.Items, color5, _id));
 								_formats.push( { label_x: _formats[0].label_x , label_y : l_cad});
 
+			}
+
+			if (graphGrade && graphGrade.length > 0) 
+			{
+				var myGrade = WPGPXMAPS.Utils.calculateGrade( graphEle, graphDist.slice(1));
 			}
 
 			if (graphGrade && graphGrade.length > 0) {
