@@ -313,11 +313,11 @@
 						<?php echo esc_html( get_option( 'wpgpxmaps_map_line_color' ) ); ?>
 					</td>
 				</tr>
-				<tr>
-					<td>zoomonscrollwheel</td>
-					<td>
-						<?php esc_html_e( 'Zoom on map when mouse scroll wheel', 'wp-gpx-maps' ); ?>
-					</td>
+					<tr>
+						<td>zoomonscrollwheel</td>
+						<td>
+							<?php esc_html_e( 'Zoom on map when mouse scroll wheel', 'wp-gpx-maps' ); ?>
+						</td>
 					<td>
 						<?php
 						esc_html_e( 'Default is:', 'wp-gpx-maps' );
@@ -325,14 +325,46 @@
 						?>
 						<strong>false</strong>
 					</td>
-					<td>
-						<?php echo esc_html( get_option( 'wpgpxmaps_zoomonscrollwheel' ) ); ?>
-					</td>
-				</tr>
-				<tr>
-					<td>waypoints</td>
-					<td>
-						<?php esc_html_e( 'Print the GPX waypoints inside the map', 'wp-gpx-maps' ); ?>
+						<td>
+							<?php echo esc_html( get_option( 'wpgpxmaps_zoomonscrollwheel' ) ); ?>
+						</td>
+					</tr>
+					<tr>
+						<td>zoom</td>
+						<td>
+							<?php esc_html_e( 'Set the initial zoom level (-1 means auto fit to track)', 'wp-gpx-maps' ); ?>
+						</td>
+						<td>
+							<?php
+							esc_html_e( 'Default is:', 'wp-gpx-maps' );
+							echo ' ';
+							?>
+							<strong>-1</strong>
+						</td>
+						<td>
+							<?php echo esc_html( get_option( 'wpgpxmaps_zoom' ) ); ?>
+						</td>
+					</tr>
+					<tr>
+						<td>rotation</td>
+						<td>
+							<?php esc_html_e( 'Rotate map in degrees (clockwise). Works only with MapBox engine.', 'wp-gpx-maps' ); ?>
+						</td>
+						<td>
+							<?php
+							esc_html_e( 'Default is:', 'wp-gpx-maps' );
+							echo ' ';
+							?>
+							<strong>0</strong>
+						</td>
+						<td>
+							<?php echo esc_html( get_option( 'wpgpxmaps_rotation' ) ); ?>
+						</td>
+					</tr>
+					<tr>
+						<td>waypoints</td>
+						<td>
+							<?php esc_html_e( 'Print the GPX waypoints inside the map', 'wp-gpx-maps' ); ?>
 					</td>
 					<td>
 						<?php

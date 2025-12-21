@@ -155,7 +155,7 @@ export class MapBoxMapEngine implements MapEngine<Map> {
         this.map = new mapboxgl.Map({
             container: targetElement,
             style: 'mapbox://styles/mapbox/streets-v11',
-            accessToken: "pk.eyJ1Ijoic2VjdXJjdWJlbWF4IiwiYSI6ImNsbW94MzRodjE4YjEya3BuM3liZXl6MXYifQ.db3c6nnAcFwFm5jD2NCg6w", // MapBoxApiKey ?? 
+            accessToken: otherParams?.MapBoxApiKey ?? '',
             center: [0, 0],
             zoom: 1,
             scrollZoom: scrollWheelZoom
@@ -248,7 +248,7 @@ export class MapBoxMapEngine implements MapEngine<Map> {
 
     }
 
-    AppPolylines(mapData: Array<[number, number] | null>, colors: string[], currentIcon: string | null, startIcon: string | null, endIcon: string | null): void {
+    AppPolylines(mapData: Array<[number, number] | null>, colors: string[], currentIcon: string | null, startIcon: string | null, endIcon: string | null, zoomLevel: number, rotationDegree: number): void {
 
         this.Bounds = mapData.filter(o => o != null);
 
@@ -326,6 +326,10 @@ export class MapBoxMapEngine implements MapEngine<Map> {
             }
 
             this.CenterMap();
+            if ( zoomLevel != -1 ) {
+                this.map?.setZoom( zoomLevel );
+            }
+            this.map?.rotateTo( rotationDegree );
 
 
             if (this.otherParams.MapBoxAnimateOnLoading == '1') {

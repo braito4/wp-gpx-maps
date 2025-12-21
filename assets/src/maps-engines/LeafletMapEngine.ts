@@ -337,7 +337,7 @@ export class LeafletMapEngine implements MapEngine<Map> {
 
     }
 
-    AppPolylines(mapData: Array<[number, number] | null>, colors: string[], currentIcon: string | null, startIcon: string | null, endIcon: string | null): void {
+    AppPolylines(mapData: Array<[number, number] | null>, colors: string[], currentIcon: string | null, startIcon: string | null, endIcon: string | null, zoomLevel: number, rotationDegree: number): void {
 
         if (null == this.map) {
             return;
@@ -374,6 +374,10 @@ export class LeafletMapEngine implements MapEngine<Map> {
         this.Bounds = mapData.filter(o => o != null);
 
         this.CenterMap();
+
+        if (zoomLevel != -1) {
+            this.map.setZoom(zoomLevel);
+        }
 
         for (let i = 0; i < pointsArray.length; i++) {
             let color = '';

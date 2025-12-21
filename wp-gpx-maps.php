@@ -333,6 +333,10 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 	$pointsoffset   	= wpgpxmaps_findValue( $attr, 'pointsoffset', 'wpgpxmaps_pointsoffset', 10 );
 	$donotreducegpx 	= wpgpxmaps_findValue( $attr, 'donotreducegpx', 'wpgpxmaps_donotreducegpx', false );
 
+	/* Rotation and zoom */
+	$zoom     = (int) wpgpxmaps_findValue( $attr, 'zoom', 'wpgpxmaps_zoom', -1 );
+	$rotation = (float) wpgpxmaps_findValue( $attr, 'rotation', 'wpgpxmaps_rotation', 0 );
+
 	$colors_map = explode( ' ', $color_map );
 
 	$gpxurl = esc_url( $gpx );
@@ -745,11 +749,13 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 					currentIcon        : "' . esc_js( $currentIcon ) . '",
 					waypointIcon       : "' . esc_js( $waypointIcon ) . '",
 					currentpositioncon : "' . esc_js( $currentpositioncon ) . '",
-					usegpsposition     : "' . esc_js( $usegpsposition ) . '",
-					zoomOnScrollWheel  : "' . esc_js( $zoomOnScrollWheel ) . '",
-					ngGalleries        : [' . esc_js( $ngGalleries ) . '],
-					ngImages           : [' . esc_js( $ngImages ) . '],
-					pluginUrl          : "' . esc_url( plugins_url() ) . '",
+						usegpsposition     : "' . esc_js( $usegpsposition ) . '",
+						zoomOnScrollWheel  : "' . esc_js( $zoomOnScrollWheel ) . '",
+						zoomLevel          : ' . wp_json_encode( $zoom ) . ',
+						rotationDegree     : ' . wp_json_encode( $rotation ) . ',
+						ngGalleries        : [' . esc_js( $ngGalleries ) . '],
+						ngImages           : [' . esc_js( $ngImages ) . '],
+						pluginUrl          : "' . esc_url( plugins_url() ) . '",
 					TFApiKey           : "' . esc_js( get_option( 'wpgpxmaps_openstreetmap_apikey' ) ) . '",
 					MapBoxApiKey           : "' . esc_js( get_option( 'wpgpxmaps_mapbox_apikey' ) ) . '",
 

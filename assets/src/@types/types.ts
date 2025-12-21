@@ -36,11 +36,13 @@ interface Params {
     startIcon: string;
     waypointIcon: string;
     endIcon: string;
-    currentIcon: string;
-    zoomOnScrollWheel: string;
-    langs: any;
-    pluginUrl: string;
-    usegpsposition: string;
+	    currentIcon: string;
+	    zoomOnScrollWheel: string;
+	    zoomLevel: number;
+	    rotationDegree: number;
+	    langs: any;
+	    pluginUrl: string;
+	    usegpsposition: string;
     currentpositioncon: string;
     TFApiKey: string;
     MapBoxApiKey: string;
@@ -86,9 +88,9 @@ interface MapEngine<T> {
 
     EventSelectChart: null | Function;
 
-    init(targetElement: HTMLElement, mapType: string, scrollWheelZoom: boolean, ApiKey: string | null | undefined, otherParams: any): void;
+	    init(targetElement: HTMLElement, mapType: string, scrollWheelZoom: boolean, ApiKey: string | null | undefined, otherParams: any): void;
 
-    AppPolylines(mapData: Array<[number, number] | null>, colors: string[], currentIcon: string | null, startIcon: string | null, endIcon: string | null): void;
+	    AppPolylines(mapData: Array<[number, number] | null>, colors: string[], currentIcon: string | null, startIcon: string | null, endIcon: string | null, zoomLevel: number, rotationDegree: number): void;
 
     AddWaypoints(waypoints: any, waypointIcon: string | null): void;
 

@@ -73,6 +73,8 @@ export class WPGPXMaps {
 			endIcon,
 			currentIcon,
 			zoomOnScrollWheel,
+			zoomLevel,
+			rotationDegree,
 			langs,
 			pluginUrl,
 			usegpsposition,
@@ -316,7 +318,7 @@ export class WPGPXMaps {
 
 		/* Print Track. */
 		if (mapData) {
-			this.map.AppPolylines(mapData, color1, currentIcon, startIcon, endIcon);
+			this.map.AppPolylines(mapData, color1, currentIcon, startIcon, endIcon, zoomLevel, rotationDegree);
 		}
 
 		/*
