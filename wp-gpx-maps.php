@@ -145,7 +145,7 @@ function wpgpxmaps_enqueue_scripts() {
 		/* Chartjs */
 		wp_register_script( 'chartjs', plugins_url( '/js/Chart.min.js', __FILE__ ), array(), '2.8.0' );
 
-		wp_register_script( 'wp-gpx-maps', plugins_url( 'js/WP-GPX-Maps.js', __FILE__ ), array( 'jquery', 'leaflet', 'chartjs' ), '1.6.02' );
+		wp_register_script( 'wp-gpx-maps', plugins_url( 'js/WP-GPX-Maps.js', __FILE__ ), array( 'jquery', 'leaflet', 'chartjs' ), WPGPXMAPS_CURRENT_VERSION );
 
 		wp_enqueue_script( 'output-style' );
 		wp_enqueue_script( 'leaflet' );
@@ -160,10 +160,10 @@ function wpgpxmaps_enqueue_scripts() {
 	else
 	{
 		/* Output Style CSS */
-		wp_register_style( 'output-style', plugins_url( 'assets/dist/style.css', __FILE__ ), array(), '1.0.0' );
+		wp_register_style( 'output-style', plugins_url( 'assets/dist/style.css', __FILE__ ), array(), WPGPXMAPS_CURRENT_VERSION );
 		wp_enqueue_style( 'output-style' );
 
-		wp_register_script_module( 'wp-gpx-maps', plugins_url( 'assets/dist/WP-GPX-Maps.es.js', __FILE__ ), array(), '1.6.02' );
+		wp_register_script_module( 'wp-gpx-maps', plugins_url( 'assets/dist/WP-GPX-Maps.es.js', __FILE__ ), array(), WPGPXMAPS_CURRENT_VERSION );
 		wp_enqueue_script_module( 'wp-gpx-maps' );
 
 	}
@@ -699,6 +699,12 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 	global $post;
 	$r = $post->ID . '_' . rand( 1,5000000 );
 
+	$module_src = add_query_arg(
+		'ver',
+		WPGPXMAPS_CURRENT_VERSION,
+		plugins_url( 'assets/dist/WP-GPX-Maps.es.js', __FILE__ )
+	);
+
 	$output = '
 		<div id="wpgpxmaps_' . esc_attr( $r ) . '" class="wpgpxmaps">
 			<div id="map_' . esc_attr( $r ) . '_cont" style="width:' . esc_attr( $w ) . '; height:' . esc_attr( $mh ) . ';position:relative" >
@@ -711,7 +717,7 @@ function wpgpxmaps_handle_shortcodes( $attr, $content = '' ) {
 		</div>
 		' . esc_html( $error ) . '
 		<script type="module">
-		import { WPGPXMaps } from "'. "../wp-content/plugins/wp-gpx-maps/assets/dist/WP-GPX-Maps.es.js" . '";
+		import { WPGPXMaps } from ' . wp_json_encode( $module_src ) . ';
 
 		window.addEventListener("load", function() {
 
